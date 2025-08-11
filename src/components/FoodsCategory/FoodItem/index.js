@@ -1,4 +1,6 @@
-import './index.scss'
+import './index.scss';
+import { useDispatch } from 'react-redux';
+import { addCard, minusCard } from '../../../store/modules/takeaway';
 
 const Foods = ({
   id,
@@ -13,6 +15,7 @@ const Foods = ({
   tag,
   count
 }) => {
+  const dispatch = useDispatch();
 
   return (
     <dd className="cate-goods">
@@ -38,12 +41,61 @@ const Foods = ({
             {price}
           </div>
           <div className="goods-count">
-            <span className="plus">+</span>
+            {count > 0 && (
+              <div>
+                <span
+                  className="minus"
+                  onClick={() =>
+                    dispatch(
+                      minusCard({
+                        id,
+                        picture,
+                        name,
+                        unit,
+                        description,
+                        food_tag_list,
+                        month_saled,
+                        like_ratio_desc,
+                        price,
+                        tag,
+                        count
+                      })
+                    )
+                  }
+                >
+                  -
+                </span>
+                <span className="count">{count}</span>
+              </div>
+            )}
+
+            <span
+              className="plus"
+              onClick={() =>
+                dispatch(
+                  addCard({
+                    id,
+                    picture,
+                    name,
+                    unit,
+                    description,
+                    food_tag_list,
+                    month_saled,
+                    like_ratio_desc,
+                    price,
+                    tag,
+                    count
+                  })
+                )
+              }
+            >
+              +
+            </span>
           </div>
         </div>
       </div>
     </dd>
-  )
-}
+  );
+};
 
-export default Foods
+export default Foods;

@@ -13,7 +13,9 @@ const App = () => {
     //监听变化
     dispatch(fetchMenu());
   }, [dispatch]); //只有dispatch变化时才重新渲染
-  const { menu } = useSelector((state) => state.menu); //这里的state.menu需要和store/index.js中定义的reducer的key一致
+  const { menu, activeIndex } = useSelector((state) => state.menu); //这里的state.menu需要和store/index.js中定义的reducer的key一致
+
+  
   return (
     <div className="home">
       {/* 导航 */}
@@ -28,15 +30,17 @@ const App = () => {
             <div className="goods-list">
               {/* 外卖商品列表 */}
               {menu &&
-                menu.map((item) => {
+                menu.map((item, index) => {
                   return (
-                    <FoodsCategory
-                      key={item.tag}
-                      // 列表标题
-                      name={item.name}
-                      // 列表商品
-                      foods={item.foods}
-                    />
+                    activeIndex === index && ( //左边为true就显示右边元素
+                      <FoodsCategory
+                        key={item.tag}
+                        // 列表标题
+                        name={item.name}
+                        // 列表商品
+                        foods={item.foods}
+                      />
+                    )
                   );
                 })}
             </div>

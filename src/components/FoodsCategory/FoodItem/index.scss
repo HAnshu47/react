@@ -46,6 +46,20 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2px;
+    .plus {
+      background-color: #f8c74e;
+    }
+    .minus {
+      border: 1px solid #f8c74e;
+    }
+    span {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      border-radius: 50%;
+    }
   }
   .goods-detail {
     display: flex;
