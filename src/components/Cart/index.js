@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import Count from '../Count';
 import './index.scss';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { showVisible } from '../../store/modules/takeaway';
 
 const Cart = () => {
   const cart = [];
@@ -24,14 +26,21 @@ const Cart = () => {
    * 这里告诉 reduce，在第一次循环前，sum 的初始值为 0
    * 如果不写，sum 会默认是数组的第一个元素（但求和通常我们希望从 0 开始）
    */
+  const dispatch = useDispatch();
+  const handleClickCart = () => {
+    if(totalCount === 0) return
+    dispatch(showVisible());
+  };
+
+  const { visible } = useSelector((state) => state.menu);
   return (
     <div className="cartContainer">
       {/* 遮罩层 添加visible类名可以显示出来 */}
-      <div className={classNames('cartOverlay')} />
+      <div className={classNames('cartOverlay', { visible })} />
       <div className="cart">
         {/* fill 添加fill类名可以切换购物车状态*/}
         {/* 购物车数量 */}
-        <div className={classNames('icon')}>
+        <div className={classNames('icon')} onClick={() => handleClickCart()}>
           {totalCount > 0 && <div className="cartCornerMark">{totalCount}</div>}
         </div>
         {/* 购物车价格 */}
@@ -52,7 +61,7 @@ const Cart = () => {
         )}
       </div>
       {/* 添加visible类名 div会显示出来 */}
-      <div className={classNames('cartPanel')}>
+      <div className={classNames('cartPanel', { visible })}>
         <div className="header">
           <span className="text">购物车</span>
           <span className="clearCart">清空购物车</span>
@@ -60,25 +69,26 @@ const Cart = () => {
 
         {/* 购物车列表 */}
         <div className="scrollArea">
-          {cart.map((item) => {
-            return (
-              <div className="cartItem" key={item.id}>
-                <img className="shopPic" src={item.picture} alt="" />
-                <div className="main">
-                  <div className="skuInfo">
-                    <div className="name">{item.name}</div>
+          {cardList &&
+            cardList.map((item) => {
+              return (
+                <div className="cartItem" key={item.id}>
+                  <img className="shopPic" src={item.picture} alt="" />
+                  <div className="main">
+                    <div className="skuInfo">
+                      <div className="name">{item.name}</div>
+                    </div>
+                    <div className="payableAmount">
+                      <span className="yuan">¥</span>
+                      <span className="price">{item.price}</span>
+                    </div>
                   </div>
-                  <div className="payableAmount">
-                    <span className="yuan">¥</span>
-                    <span className="price">{item.price}</span>
+                  <div className="skuBtnWrapper btnGroup">
+                    <Count count={item.count} />
                   </div>
                 </div>
-                <div className="skuBtnWrapper btnGroup">
-                  <Count count={item.count} />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     </div>

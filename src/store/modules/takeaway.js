@@ -6,7 +6,8 @@ const takeawaySlice = createSlice({
   initialState: {
     menu: [],
     activeIndex: 0,
-    cardList: []
+    cardList: [],
+    visible: false
   },
   reducers: {
     setMenu(state, action) {
@@ -47,22 +48,27 @@ const takeawaySlice = createSlice({
               food.count--;
             }
           });
-        })
-      }else{
+        });
+      } else {
         state.menu.map((item) => {
           item.foods.map((food) => {
             if (food.id === action.payload.id) {
               food.count--;
             }
           });
-        })
+        });
       }
+    },
+    showVisible(state, action) {
+      state.visible = !state.visible;
+      console.log(state.visible, ' =====');
     }
   }
 });
 
 // 封装获取菜单的异步函数
-const { setMenu, setActiveIndex, addCard,minusCard } = takeawaySlice.actions;
+const { setMenu, setActiveIndex, addCard, minusCard, showVisible } =
+  takeawaySlice.actions;
 const fetchMenu = () => {
   return async (dispatch) => {
     const res = await axios.get('http://localhost:3004/takeaway');
@@ -70,6 +76,6 @@ const fetchMenu = () => {
   };
 };
 
-export { fetchMenu, setActiveIndex, addCard,minusCard};
+export { fetchMenu, setActiveIndex, addCard, minusCard, showVisible };
 const reducer = takeawaySlice.reducer;
 export default reducer;
