@@ -84,7 +84,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="skuBtnWrapper btnGroup">
-                    <Count count={item.count} />
+                    <Count count={item.count} id={item.id} />
                   </div>
                 </div>
               );

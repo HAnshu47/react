@@ -61,13 +61,28 @@ const takeawaySlice = createSlice({
           });
         });
       }
+      if(state.carList.length === 0){
+        state.visible = false;
+      }
     },
     showVisible(state, action) {
       state.visible = !state.visible;
     },
     clearCartList(state) {
-      state.carList = [];
-      state.visible = false;
+      state.carList = []; //清空购物车
+      state.visible = false; //关闭购物车
+      state.menu = state.menu.map((item) => {
+        //清空菜单中食物的count
+        return {
+          ...item,
+          foods: item.foods.map((food) => {
+            return {
+              ...food,
+              count: 0
+            };
+          })
+        };
+      });
     }
   }
 });

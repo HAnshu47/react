@@ -227,6 +227,26 @@
       .skuBtnWrapper {
         width: 70px;
         margin-top: 51.5px;
+        display: flex;
+
+        .minus,
+        .plus,
+        span:not(.minus):not(.plus) {
+          display: inline-block;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          text-align: center;
+          line-height: 20px;
+        }
+
+        .minus {
+          border: 1px solid #f8c74e;
+        }
+
+        .plus {
+          background-color: #f8c74e;
+        }
       }
     }
   }
