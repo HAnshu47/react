@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const store = createSlice({
+const takeawaySlice = createSlice({
   name: 'takeaway',
   initialState: {
     menu: [],
@@ -18,7 +18,7 @@ const store = createSlice({
 });
 
 // 封装获取菜单的异步函数
-const { setMenu, setActiveIndex } = store.actions;
+const { setMenu, setActiveIndex } = takeawaySlice.actions;
 const fetchMenu = () => {
   return async (dispatch) => {
     const res = await axios.get('http://localhost:3004/takeaway');
@@ -27,5 +27,5 @@ const fetchMenu = () => {
 };
 
 export { fetchMenu, setActiveIndex };
-const reducer = store.reducer;
+const reducer = takeawaySlice.reducer;
 export default reducer;

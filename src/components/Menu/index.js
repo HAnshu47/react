@@ -9,7 +9,8 @@ const Menu = (props) => {
   useEffect(() => {
     dispatch(fetchMenu());
   }, [dispatch]);
-  const { menu, activeIndex } = useSelector((state) => state.menu); // const { menu }  定义和解构都需要和store/index.js中定义的reducer的key一致
+  const { menu,activeIndex } = useSelector((state) => state.menu); // const { menu }  定义和解构都需要和store/index.js中定义的reducer的key一致
+
   //使用父子组件传值
   const { menuList } = props;
 
@@ -24,7 +25,10 @@ const Menu = (props) => {
           <div
             onClick={() => dispatch(setActiveIndex(index))}
             key={item.tag}
-            className={classNames('list-menu-item', activeIndex === index && 'active')}
+            className={classNames(
+              'list-menu-item',
+              activeIndex === index && 'active'
+            )}
           >
             {item.name}
           </div>
