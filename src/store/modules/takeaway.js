@@ -3,18 +3,22 @@ import axios from 'axios';
 
 const store = createSlice({
   name: 'takeaway',
-  initialState: { 
-    menu: []
+  initialState: {
+    menu: [],
+    activeIndex: 0
   },
   reducers: {
     setMenu(state, action) {
       state.menu = action.payload;
+    },
+    setActiveIndex(state, action) {
+      state.activeIndex = action.payload; //制作active选中
     }
   }
 });
 
 // 封装获取菜单的异步函数
-const { setMenu } = store.actions;
+const { setMenu, setActiveIndex } = store.actions;
 const fetchMenu = () => {
   return async (dispatch) => {
     const res = await axios.get('http://localhost:3004/takeaway');
@@ -22,6 +26,6 @@ const fetchMenu = () => {
   };
 };
 
-export { fetchMenu };
+export { fetchMenu, setActiveIndex };
 const reducer = store.reducer;
 export default reducer;
