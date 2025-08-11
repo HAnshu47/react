@@ -2,22 +2,20 @@ import classNames from 'classnames';
 import Count from '../Count';
 import './index.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { showVisible } from '../../store/modules/takeaway';
+import { showVisible, clearCartList } from '../../store/modules/takeaway';
 
 const Cart = () => {
-  const cart = [];
   // const dispatch = useDispatch();
-  const { cardList } = useSelector((state) => state.menu);
+  const { carList } = useSelector((state) => state.menu);
   const totalPirce =
-    cardList &&
-    cardList
+    carList &&
+    carList
       .map((item) => item.price * item.count)
       .reduce((sum, cur) => sum + cur, 0);
-  console.log(cardList, 'cardList');
+  console.log(carList, 'carList');
   const totalCount =
-    cardList &&
-    cardList.map((item) => item.count).reduce((sum, cur) => sum + cur, 0);
+    carList &&
+    carList.map((item) => item.count).reduce((sum, cur) => sum + cur, 0);
 
   /**
    * sum 累加器
@@ -28,7 +26,7 @@ const Cart = () => {
    */
   const dispatch = useDispatch();
   const handleClickCart = () => {
-    if(totalCount === 0) return
+    if (totalCount === 0) return;
     dispatch(showVisible());
   };
 
@@ -64,13 +62,15 @@ const Cart = () => {
       <div className={classNames('cartPanel', { visible })}>
         <div className="header">
           <span className="text">购物车</span>
-          <span className="clearCart">清空购物车</span>
+          <span className="clearCart" onClick={() => dispatch(clearCartList())}>
+            清空购物车
+          </span>
         </div>
 
         {/* 购物车列表 */}
         <div className="scrollArea">
-          {cardList &&
-            cardList.map((item) => {
+          {carList &&
+            carList.map((item) => {
               return (
                 <div className="cartItem" key={item.id}>
                   <img className="shopPic" src={item.picture} alt="" />

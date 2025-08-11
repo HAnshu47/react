@@ -1,6 +1,6 @@
 import './index.scss';
 import { useDispatch } from 'react-redux';
-import { addCard, minusCard } from '../../../store/modules/takeaway';
+import { addCar, minusCar } from '../../../store/modules/takeaway';
 
 const Foods = ({
   id,
@@ -47,7 +47,7 @@ const Foods = ({
                   className="minus"
                   onClick={() =>
                     dispatch(
-                      minusCard({
+                      minusCar({
                         id,
                         picture,
                         name,
@@ -73,7 +73,7 @@ const Foods = ({
               className="plus"
               onClick={() =>
                 dispatch(
-                  addCard({
+                  addCar({
                     id,
                     picture,
                     name,
