@@ -1,11 +1,12 @@
 import './App.scss';
+import Layout from './pages/layout';
 
 const App = () => {
  
   
   return (
     <div className="App"> 
-    123
+    <Layout />
     </div>
   );
 };
