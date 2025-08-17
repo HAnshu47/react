@@ -21,10 +21,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite && npm run serve",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "json-server  --watch server/data.json --port 3001"
+    "serve": "json-server  --watch server/data.json --port 3089"
   },
   "eslintConfig": {
     "extends": [

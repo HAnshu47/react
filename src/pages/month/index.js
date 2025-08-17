@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getBillList } from '../../store/modules/billLIst';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function index() {
+export default function Index() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getBillList());
+  }, [dispatch]);
+  const {billList} = useSelector((state) => state.billList);
   return (
     <div>
-      month
+      {/* 账单结余 */}
+
+      {/* 账单详情 */}
     </div>
   );
 }
