@@ -28,3 +28,39 @@ export const getAllMonthList = (year) => {
   }
   return months.reverse();
 };
+
+export const getMonthlyBalance = (year, billList) => {
+  // 筛选出指定年份的账单
+  const currentYearBill = billList.filter(
+    (item) => dayjs(item.date).year() === year
+  );
+
+  const months = getAllMonthList(year); // 1-12 或已过月份
+  const monthlyData = months.map((month) => {
+    // 筛选该月份的账单
+    const monthBill = currentYearBill.filter(
+      (item) => dayjs(item.date).month() === month - 1
+    );
+
+    // 计算收支
+    const monthIncome = monthBill.reduce(
+      (acc, cur) => (cur.type === 'income' ? acc + cur.money : acc),
+      0
+    );
+    const monthPay = monthBill.reduce(
+      (acc, cur) => (cur.type === 'pay' ? acc - cur.money : acc),
+      0
+    );
+
+    const monthBalance = monthIncome - monthPay;
+
+    return {
+      month,
+      income: monthIncome,
+      pay: monthPay,
+      balance: monthBalance
+    };
+  });
+
+  return monthlyData;
+};

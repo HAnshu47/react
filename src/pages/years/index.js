@@ -6,7 +6,11 @@ import '../../App.scss';
 import dayjs from 'dayjs';
 import { Picker } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import { formatMoney, getAllMonthList } from '../../utils/format';
+import {
+  formatMoney,
+  getAllMonthList,
+  getMonthlyBalance
+} from '../../utils/format';
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -43,7 +47,6 @@ export default function Index() {
     }
     return acc;
   }, 0);
-  console.log(getAllMonthList(currentYear));
 
   const balanceList = [
     {
@@ -64,12 +67,13 @@ export default function Index() {
     setValue(year);
   };
 
+  const monthList = getMonthlyBalance(value[0], billList);
+
   return (
     <div>
       <div className="bill-nav-bar">
-        {/* <NavBar backIcon={false}>年度账单</NavBar> */}
         <NavBar backIcon={false}>
-          {value}年
+          {value}年度账单
           <span onClick={() => setVisible(true)}>
             {visible && visible ? <UpOutline /> : <DownOutline />}
           </span>
@@ -83,9 +87,6 @@ export default function Index() {
           setVisible(false);
         }}
         value={value}
-        onChange={(v) => {
-          handleChangeYear(v);
-        }}
         onConfirm={(v) => {
           handleChangeYear(v);
         }}
@@ -105,8 +106,8 @@ export default function Index() {
           })}
       </div>
       {/* 月账单结余 */}
-      <div className="bill-balance-details">
-        {getAllMonthList(value[0]).map((item) => {
+      {/* <div className="bill-balance-details">
+        {getMonthlyBalance.map((item) => {
           return (
             <div className="bill-balance-item">
               <div className="bill-balance-item-title">{item}月</div>
@@ -122,7 +123,27 @@ export default function Index() {
             </div>
           );
         })}
-      </div>{' '}
+      </div>{' '} */}
+      <div className="bill-balance-details">
+        {monthList.map((item) => {
+          return (
+            <div className="bill-balance-item" key={item.month}>
+              <div className="bill-balance-item-title">{item.month}月</div>
+              <div className="bill-balance-item-card">
+                <div className="bill-balance-item-text">
+                  支出: <span>{formatMoney(item.income)}</span>
+                </div>
+                <div className="bill-balance-item-text">
+                  收入: <span>{formatMoney(item.pay)}</span>
+                </div>
+                <div className="bill-balance-item-text">
+                  结余: <span>{formatMoney(item.balance)}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
