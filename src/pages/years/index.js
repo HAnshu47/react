@@ -6,7 +6,7 @@ import '../../App.scss';
 import dayjs from 'dayjs';
 import { Picker } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import { formatMoney } from '../../utils/format';
+import { formatMoney, getAllMonthList } from '../../utils/format';
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -43,6 +43,7 @@ export default function Index() {
     }
     return acc;
   }, 0);
+  console.log(getAllMonthList(currentYear));
 
   const balanceList = [
     {
@@ -74,7 +75,6 @@ export default function Index() {
           </span>
         </NavBar>
       </div>
-
       {/* 年份下拉 */}
       <Picker
         columns={basicColumns}
@@ -90,7 +90,6 @@ export default function Index() {
           handleChangeYear(v);
         }}
       />
-
       {/* 账单结余 */}
       <div className="bill-balance">
         {balanceList &&
@@ -106,6 +105,24 @@ export default function Index() {
           })}
       </div>
       {/* 月账单结余 */}
+      <div className="bill-balance-details">
+        {getAllMonthList(value[0]).map((item) => {
+          return (
+            <div className="bill-balance-item">
+              <div className="bill-balance-item-title">{item}月</div>
+              <div className="bill-balance-item-card">
+                {balanceList.map((item) => {
+                  return (
+                    <div className="bill-balance-item-text">
+                      {item.label}:<span>123</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>{' '}
     </div>
   );
 }
