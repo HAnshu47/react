@@ -80,7 +80,7 @@ export default function Index() {
         {balanceList &&
           balanceList.map((item) => {
             return (
-              <div className="bill-balance-list">
+              <div className="bill-balance-list" key={item.label}>
                 <div className="bill-balance-num">
                   {formatMoney(item.value)}
                 </div>
