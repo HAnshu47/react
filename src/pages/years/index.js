@@ -6,6 +6,7 @@ import '../../App.scss';
 import dayjs from 'dayjs';
 import { Picker } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
+import { formatMoney } from '../../utils/format';
 
 export default function Index() {
   const dispatch = useDispatch();
@@ -23,6 +24,45 @@ export default function Index() {
   ];
   const [value, setValue] = useState([currentYear]);
   const [visible, setVisible] = useState(false);
+
+  // 获取当前选中年账单详情
+  const currentYearBill = billList.filter((item) => {
+    return dayjs(item.date).year() === value[0];
+  });
+
+  // 算出账单金额，billList.money字段
+  const balanceIncome = currentYearBill.reduce((acc, cur) => {
+    if (cur.type === 'income') {
+      acc += cur.money;
+    }
+    return acc;
+  }, 0);
+  const balancePay = currentYearBill.reduce((acc, cur) => {
+    if (cur.type === 'pay') {
+      acc -= cur.money;
+    }
+    return acc;
+  }, 0);
+
+  const balanceList = [
+    {
+      label: '支出',
+      value: balancePay
+    },
+    {
+      label: '收入',
+      value: balanceIncome
+    },
+    {
+      label: '结余',
+      value: balanceIncome - balancePay
+    }
+  ];
+  const handleChangeYear = (year) => {
+    console.log(year, 'year');
+    setValue(year);
+  };
+
   return (
     <div>
       <div className="bill-nav-bar">
@@ -34,8 +74,8 @@ export default function Index() {
           </span>
         </NavBar>
       </div>
-      {/* 年份下拉 */}
 
+      {/* 年份下拉 */}
       <Picker
         columns={basicColumns}
         visible={visible}
@@ -43,12 +83,28 @@ export default function Index() {
           setVisible(false);
         }}
         value={value}
+        onChange={(v) => {
+          handleChangeYear(v);
+        }}
         onConfirm={(v) => {
-          setValue(v);
+          handleChangeYear(v);
         }}
       />
 
       {/* 账单结余 */}
+      <div className="bill-balance">
+        {balanceList &&
+          balanceList.map((item) => {
+            return (
+              <div className="bill-balance-list">
+                <div className="bill-balance-num">
+                  {formatMoney(item.value)}
+                </div>
+                <div className="bill-balance-text">{item.label}</div>
+              </div>
+            );
+          })}
+      </div>
       {/* 月账单结余 */}
     </div>
   );

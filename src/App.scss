@@ -25,8 +25,23 @@
   border-top: solid 1px var(--adm-color-border);
 }
 
-.bill-nav-bar{
-  position: sticky ;
-  color:#000;
-  background-color:#ccc ;
+.bill-nav-bar {
+  position: sticky;
+  color: #000;
+  background-color: #ccc;
+}
+.bill-balance {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  border: 1px solid #ccc;
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+  }
 }
