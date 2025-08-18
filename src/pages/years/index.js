@@ -9,6 +9,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import {
   formatMoney,
   getAllMonthList,
+  getYearBalance,
   getMonthlyBalance
 } from '../../utils/format';
 
@@ -29,41 +30,24 @@ export default function Index() {
   const [value, setValue] = useState([currentYear]);
   const [visible, setVisible] = useState(false);
 
-  // 获取当前选中年账单详情
-  const currentYearBill = billList.filter((item) => {
-    return dayjs(item.date).year() === value[0];
-  });
-
-  // 算出账单金额，billList.money字段
-  const balanceIncome = currentYearBill.reduce((acc, cur) => {
-    if (cur.type === 'income') {
-      acc += cur.money;
-    }
-    return acc;
-  }, 0);
-  const balancePay = currentYearBill.reduce((acc, cur) => {
-    if (cur.type === 'pay') {
-      acc -= cur.money;
-    }
-    return acc;
-  }, 0);
+  getYearBalance(billList, value[0]);
+  const { income, pay, balance } = getYearBalance(billList, value[0]);
 
   const balanceList = [
     {
       label: '支出',
-      value: balancePay
+      value: pay
     },
     {
       label: '收入',
-      value: balanceIncome
+      value: income
     },
     {
       label: '结余',
-      value: balanceIncome - balancePay
+      value: balance
     }
   ];
   const handleChangeYear = (year) => {
-    console.log(year, 'year');
     setValue(year);
   };
 
