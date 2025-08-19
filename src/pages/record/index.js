@@ -48,7 +48,7 @@ export default function Index() {
     // 有数据请求，保存成功后返回上一页
     const payload = {
       type: activeKey,
-      money,
+      money: activeKey === 'pay' ? -money : money,
       date: time,
       useFor: selectType
     };

@@ -120,11 +120,13 @@ export const getMonthBalance = (billList, year, month) => {
   );
 
   const income = currentMonthBill.reduce(
-    (acc, cur) => (cur.type === 'income' ? acc + cur.money : acc),
+    (acc, cur) => (cur.type === 'income' ? acc + Number(cur.money) : acc),
     0
   );
+
   const pay = currentMonthBill.reduce(
-    (acc, cur) => (cur.type === 'pay' ? acc - cur.money : acc),
+    (acc, cur) =>
+      cur.type === 'pay' ? acc + Math.abs(Number(cur.money)) : acc,
     0
   );
 
@@ -177,14 +179,14 @@ export const filterByYearMonth = (list, year, month) => {
       .filter((item) => item.type === 'income')
       .reduce((sum, item) => sum + item.money, 0);
 
-    const expense = details
+    const pay = details
       .filter((item) => item.type === 'pay')
       .reduce((sum, item) => sum + Math.abs(item.money), 0);
     return {
       date,
       income,
-      expense,
-      balance: income - expense,
+      pay,
+      balance: income - pay,
       details
     };
   });
@@ -194,6 +196,5 @@ export const filterByYearMonth = (list, year, month) => {
     (a, b) => new Date(b.details[0].date) - new Date(a.details[0].date)
   );
 
-  console.log(result, '??');
   return result;
 };

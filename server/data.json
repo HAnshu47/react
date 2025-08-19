@@ -87,13 +87,13 @@
     {
       "type": "income",
       "money": "1000",
-      "date": "",
+      "date": "2025-08-19",
       "useFor": "salary",
       "id": 20
     },
     {
       "type": "pay",
-      "money": "200",
+      "money": "-200",
       "date": "2025-08-19",
       "useFor": "dessert",
       "id": 21
