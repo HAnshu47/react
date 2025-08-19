@@ -109,3 +109,27 @@ export const getAllMonthListColumn = (currentYear) => {
     value: item
   }));
 };
+
+export const getMonthBalance = (billList, year, month) => {
+  // 筛选指定年份账单
+  const currentYearBill = billList.filter(
+    (item) => dayjs(item.date).year() === year
+  );
+  const currentMonthBill = currentYearBill.filter(
+    (item) => dayjs(item.date).month() === month - 1
+  );
+
+  const income = currentMonthBill.reduce(
+    (acc, cur) => (cur.type === 'income' ? acc + cur.money : acc),
+    0
+  );
+  const pay = currentMonthBill.reduce(
+    (acc, cur) => (cur.type === 'pay' ? acc - cur.money : acc),
+    0
+  );
+
+  // 结余 = 收入 - 支出
+  const balance = income - pay;
+
+  return { income, pay, balance };
+};

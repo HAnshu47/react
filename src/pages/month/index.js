@@ -10,6 +10,7 @@ import '../../App.scss';
 import { UpOutline, DownOutline } from 'antd-mobile-icons';
 import dayjs from 'dayjs';
 import { Picker } from 'antd-mobile';
+import { formatMoney, getMonthBalance } from '../../utils/format';
 
 export default function Index() {
   // 获取当前年份和月份
@@ -37,6 +38,25 @@ export default function Index() {
   const handleChangeYear = (value) => {
     dispatch(changeColumnLists(value[0]));
   };
+  const { income, pay, balance } = getMonthBalance(
+    billList,
+    value[0],
+    value[1] || month
+  );
+  const balanceList = [
+    {
+      label: '支出',
+      value: pay
+    },
+    {
+      label: '收入',
+      value: income
+    },
+    {
+      label: '结余',
+      value: balance
+    }
+  ];
 
   return (
     <div>
@@ -66,6 +86,19 @@ export default function Index() {
         />
       </div>
       {/* 账单结余 */}
+      <div className="bill-balance">
+        {balanceList &&
+          balanceList.map((item) => {
+            return (
+              <div className="bill-balance-list" key={item.label}>
+                <div className="bill-balance-num">
+                  {formatMoney(item.value)}
+                </div>
+                <div className="bill-balance-text">{item.label}</div>
+              </div>
+            );
+          })}
+      </div>
       {/* 账单详情 */}
     </div>
   );
