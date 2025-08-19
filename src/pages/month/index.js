@@ -5,12 +5,15 @@ import {
   changeColumnLists
 } from '../../store/modules/billLIst';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavBar } from 'antd-mobile';
+import { NavBar,ErrorBlock,Picker, Card  } from 'antd-mobile';
 import '../../App.scss';
 import { UpOutline, DownOutline } from 'antd-mobile-icons';
 import dayjs from 'dayjs';
-import { Picker } from 'antd-mobile';
-import { formatMoney, getMonthBalance } from '../../utils/format';
+import {
+  formatMoney,
+  getMonthBalance,
+  filterByYearMonth
+} from '../../utils/format';
 
 export default function Index() {
   // 获取当前年份和月份
@@ -58,6 +61,7 @@ export default function Index() {
     }
   ];
 
+  const monthDetails = filterByYearMonth(billList, value[0], value[1] || month);
   return (
     <div>
       <div className="bill-nav-bar">
@@ -100,6 +104,53 @@ export default function Index() {
           })}
       </div>
       {/* 账单详情 */}
+      {monthDetails?.length === 0 ? (
+         <ErrorBlock status='empty' />
+      ) : (
+        <div className="month-balance-details">
+          {monthDetails &&
+            monthDetails.map((item) => {
+              return (
+                <Card
+                  title={
+                    <div className="month-balance-card">
+                      <div className="month-balance-card-title">
+                        {item.date}
+                      </div>
+                      <div className="month-balance-card-bill">
+                        <div
+                          className="bill-balance-item-card"
+                          style={{ padding: '0' }}
+                        >
+                          <div className="bill-balance-item-text">
+                            支出: <span>{formatMoney(item.pay)}</span>
+                          </div>
+                          <div className="bill-balance-item-text">
+                            收入: <span>{formatMoney(item.income)}</span>
+                          </div>
+                          <div className="bill-balance-item-text">
+                            结余: <span>{formatMoney(item.balance)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                  style={{ borderRadius: '16px' }}
+                >
+                  {item.details &&
+                    item.details.map((detail) => {
+                      return (
+                        <div className="bill-item-details">
+                          <span>{detail.useFor}</span>
+                          <span>{detail.money}</span>
+                        </div>
+                      );
+                    })}
+                </Card>
+              );
+            })}
+        </div>
+      )}
     </div>
   );
 }

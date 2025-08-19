@@ -133,3 +133,67 @@ export const getMonthBalance = (billList, year, month) => {
 
   return { income, pay, balance };
 };
+
+// 对每个月详情列表处理
+export const filterByYearMonth = (list, year, month) => {
+  // month 补零（保证 "04" 这种格式）
+  const monthStr = String(month).padStart(2, '0');
+
+  //  过滤符合年份和月份的数据
+  const filtered = list.filter((item) => {
+    const d = new Date(item.date);
+    return d.getFullYear() === year && d.getMonth() + 1 === month;
+  });
+
+  //  按天分组
+  const grouped = {};
+  filtered.forEach((item) => {
+    const d = new Date(item.date);
+    const dayStr = String(d.getDate()).padStart(2, '0');
+    const key = `${monthStr}-${dayStr}`;
+
+    if (!grouped[key]) {
+      grouped[key] = [];
+    }
+    grouped[key].push(item);
+  });
+
+  /**转换为目标格式
+   * {
+   * date:04-03,
+   * details:[{
+   * "type": "pay",
+   * "money": -10,
+   * "date": "2023-04-03T11:14:56.036Z",
+   * "useFor": "food",
+   * "id": 19 }]
+   * } */
+  let result = Object.keys(grouped).map((date) => {
+    const details = grouped[date].sort(
+      (a, b) => new Date(b.date) - new Date(a.date)
+    );
+
+    const income = details
+      .filter((item) => item.type === 'income')
+      .reduce((sum, item) => sum + item.money, 0);
+
+    const expense = details
+      .filter((item) => item.type === 'pay')
+      .reduce((sum, item) => sum + Math.abs(item.money), 0);
+    return {
+      date,
+      income,
+      expense,
+      balance: income - expense,
+      details
+    };
+  });
+
+  //  按日期倒序排序
+  result.sort(
+    (a, b) => new Date(b.details[0].date) - new Date(a.details[0].date)
+  );
+
+  console.log(result, '??');
+  return result;
+};

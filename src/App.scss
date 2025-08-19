@@ -45,10 +45,9 @@
     align-items: center;
   }
 }
-.bill-balance-details{
-  height:calc(100vh - 45px - 102px - 49px);
+.bill-balance-details {
+  height: calc(100vh - 45px - 102px - 49px);
   overflow: auto;
-
 }
 .bill-balance-item {
   padding: 20px;
@@ -66,6 +65,9 @@
     font-weight: 600;
     display: block;
   }
+  &-text{
+    margin-right: 20px;
+  }
 
   &-text:nth-child(1) {
     color: red;
@@ -75,6 +77,28 @@
   }
 }
 
-.bill-balance-time{
-  padding:20px
+.bill-balance-time {
+  padding: 20px;
+}
+.month-balance-details {
+  .month-balance-card {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    
+
+    .month-balance-card-bill {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+.bill-item-details{
+  display: flex;
+  justify-content: space-between;
+  span{
+    display: inline-block;
+    margin-bottom: 20px;
+  }
 }
