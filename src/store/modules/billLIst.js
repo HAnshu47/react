@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { getYearListColums, getAllMonthListColumn } from '../../utils/format';
+import http from '../../request/axios';
 
 const billListSlice = createSlice({
   name: 'billList',
@@ -25,11 +25,11 @@ const billListSlice = createSlice({
 const { setBillList, setColumnLists, changeColumnLists } =
   billListSlice.actions;
 const getBillList = () => async (dispatch) => {
-  const res = await axios.get('http://localhost:3089/ka');
-  dispatch(setBillList(res.data));
+  const res = await http.get('/ka');
+  dispatch(setBillList(res));
 };
 const addBill = (payload) => async (dispatch) => {
-  await axios.post('http://localhost:3089/ka', payload);
+  await http.post('/ka', payload);
 };
 export { setBillList, getBillList, setColumnLists, changeColumnLists, addBill };
 const reducer = billListSlice.reducer;
