@@ -14,7 +14,7 @@ export default function Index() {
   const location = useLocation();
   const tabs = [
     {
-      key: '/',
+      key: '',
       title: '月账单',
       icon: <AppOutline />
     },

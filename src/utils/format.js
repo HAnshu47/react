@@ -86,3 +86,26 @@ export const getMonthlyBalance = (year, billList) => {
 
   return monthlyData;
 };
+
+export const getYearListColums = (currentYear) => {
+  const getYearList = Array.from({ length: 20 }, (_, i) => currentYear - i);
+  const monthList = getAllMonthList(currentYear);
+  return [
+    getYearList.map((item) => ({
+      label: String(item),
+      value: item
+    })),
+    monthList.map((item) => ({
+      label: String(item),
+      value: item
+    }))
+  ];
+};
+
+export const getAllMonthListColumn = (currentYear) => {
+  const monthList = getAllMonthList(currentYear);
+  return monthList.map((item) => ({
+    label: String(item),
+    value: item
+  }));
+};
