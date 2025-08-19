@@ -83,6 +83,20 @@
       "date": "2023-04-03T11:14:56.036Z",
       "useFor": "food",
       "id": 19
+    },
+    {
+      "type": "income",
+      "money": "1000",
+      "date": "",
+      "useFor": "salary",
+      "id": 20
+    },
+    {
+      "type": "pay",
+      "money": "200",
+      "date": "2025-08-19",
+      "useFor": "dessert",
+      "id": 21
     }
   ]
 }

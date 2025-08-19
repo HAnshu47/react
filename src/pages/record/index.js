@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getBillList } from '../../store/modules/billLIst';
-import { useDispatch, useSelector } from 'react-redux';
+import { getBillList, addBill } from '../../store/modules/billLIst';
+import { useDispatch } from 'react-redux';
 import {
   NavBar,
   CapsuleTabs,
@@ -14,16 +14,17 @@ import '../../App.scss';
 import { useNavigate } from 'react-router-dom';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import dayjs from 'dayjs';
+import { pay, income } from './json/index.json';
 
 export default function Index() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBillList());
   }, [dispatch]);
-  const { billList } = useSelector((state) => state.billList);
   const [activeKey, setActiveKey] = useState('income');
   const [visible, setVisible] = useState(false);
   const [time, setTime] = useState('');
+  const [selectType, setSelectType] = useState('');
   const now = new Date();
   const history = useNavigate();
   const back = () => {
@@ -31,18 +32,28 @@ export default function Index() {
   };
 
   const handleSaveBill = () => {
-    if (!money)
-      return Toast.show({
-        icon: 'fail',
-        content: '请输入金额'
-      });
+    const msg = {
+      money: '请输入金额',
+      selectType: '请选择类型',
+      time: '请选择时间'
+    };
+    const validators = { money, selectType, time };
+
+    for (const key in validators) {
+      if (!validators[key]) {
+        Toast.show(msg[key]);
+        return;
+      }
+    }
     // 有数据请求，保存成功后返回上一页
     const payload = {
       type: activeKey,
       money,
       date: time,
-      useFor: 'salary'
+      useFor: selectType
     };
+    dispatch(addBill(payload));
+    history('/');
   };
   const handleConfirmTime = (val) => {
     // 选择时间
@@ -56,7 +67,10 @@ export default function Index() {
         <NavBar onBack={back}>新增账单</NavBar>
       </div>
       {/* 收入 / 支出按钮 */}
-      <CapsuleTabs activeKey={activeKey} onChange={(key) => setActiveKey(key)}>
+      <CapsuleTabs
+        activeKey={activeKey}
+        onChange={(key) => (setActiveKey(key), setSelectType(''))}
+      >
         <CapsuleTabs.Tab title="收入" key="income" />
         <CapsuleTabs.Tab title="支出" key="pay" />
       </CapsuleTabs>
@@ -95,6 +109,32 @@ export default function Index() {
       />
 
       {/* 类别显示 */}
+      {(activeKey === 'income' ? income : pay).map((item) => {
+        return (
+          <div className="bill-type">
+            <div className="bill-type-title" key={item.type}>
+              {item.name}
+            </div>
+            <div className="bill-type-item">
+              {item.list.map((items) => {
+                return (
+                  <div
+                    className={
+                      selectType === items.type
+                        ? 'active bill-type-items'
+                        : 'bill-type-items'
+                    }
+                    key={items.type}
+                    onClick={() => setSelectType(items.type)}
+                  >
+                    {items.name}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

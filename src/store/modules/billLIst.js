@@ -22,12 +22,15 @@ const billListSlice = createSlice({
 });
 
 // 封装获取菜单的异步函数
-const { setBillList, setColumnLists,changeColumnLists } = billListSlice.actions;
+const { setBillList, setColumnLists, changeColumnLists } =
+  billListSlice.actions;
 const getBillList = () => async (dispatch) => {
   const res = await axios.get('http://localhost:3089/ka');
   dispatch(setBillList(res.data));
 };
-
-export { setBillList, getBillList, setColumnLists,changeColumnLists };
+const addBill = (payload) => async (dispatch) => {
+  await axios.post('http://localhost:3089/ka', payload);
+};
+export { setBillList, getBillList, setColumnLists, changeColumnLists, addBill };
 const reducer = billListSlice.reducer;
 export default reducer;
