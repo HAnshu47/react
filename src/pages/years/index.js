@@ -115,10 +115,10 @@ export default function Index() {
               <div className="bill-balance-item-title">{item.month}月</div>
               <div className="bill-balance-item-card">
                 <div className="bill-balance-item-text">
-                  支出: <span>{formatMoney(item.income)}</span>
+                  支出: <span>{formatMoney(item.pay)}</span>
                 </div>
                 <div className="bill-balance-item-text">
-                  收入: <span>{formatMoney(item.pay)}</span>
+                  收入: <span>{formatMoney(item.income)}</span>
                 </div>
                 <div className="bill-balance-item-text">
                   结余: <span>{formatMoney(item.balance)}</span>
