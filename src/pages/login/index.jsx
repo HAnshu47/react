@@ -2,37 +2,36 @@ import React, { useEffect, useState } from 'react'
 import './index.scss'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import { useDispatch } from 'react-redux';
+import { postAuth } from '../../store/modules/auth'
 
 
 export default function Login() {
+  const dispatch = useDispatch()
   const [form] = Form.useForm();
-
-
   const onFinish = (values) => {
-    console.log('Finish:', values);
+    // 实现登录
+    dispatch(postAuth(values))
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
   useEffect(() => {
   }, []);
-  const [userName, setUserName] = useState('');
-  const [passWord, setPassWord] = useState('');
+  const [mobile, setMobile] = useState('13800000002');
+  const [code, setCode] = useState('246810');
   const rules = {
-    username: [
+    mobile: [
       {
         required: true,
-        message: 'Please input your username!',
+        message: 'Please input your mobile!',
       },
-    ], password: [
+    ], code: [
       {
         required: true,
-        message: 'Please input your password!',
+        message: 'Please input your code!',
       },
     ]
-  }
-  const conste = (e) => {
-    console.log(e.target.value)
   }
 
 
@@ -42,21 +41,21 @@ export default function Login() {
     <div className='continer'>
       <div className='login-container'>
         <div className='login-container-left'>
-          <Form form={form} name="horizontal_login" onFinish={onFinish} onFinishFailed={onFinishFailed} initialValues={{ username: userName, password: passWord }}>
+          <Form form={form} name="horizontal_login" onFinish={onFinish} onFinishFailed={onFinishFailed} initialValues={{ mobile, code }}>
             <Form.Item
-              name="username"
-              rules={rules.username}
+              name="mobile"
+              rules={rules.mobile}
             >
-              <Input prefix={<UserOutlined />} placeholder="Username" onChange={e => setUserName(e.target.value)} />
+              <Input prefix={<UserOutlined />} placeholder="Mobile" onChange={e => setMobile(e.target.value)} />
             </Form.Item>
             <Form.Item
-              name="password"
-              rules={rules.password}
+              name="code"
+              rules={rules.code}
             >
-              <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" onChange={e => setPassWord(e.target.value)} />
+              <Input.Password prefix={<LockOutlined />} type="code" placeholder="Code" onChange={e => setCode(e.target.value)} />
             </Form.Item>
             <Form.Item >
-              <Button block type="primary" htmlType="submit" disabled={!userName || !passWord}  >
+              <Button block type="primary" htmlType="submit" disabled={!mobile || !code}  >
                 Login
               </Button>
             </Form.Item>

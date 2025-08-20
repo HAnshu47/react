@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 // 导入billList模块
 
-import billList from './modules/billLIst';
+import auth from './modules/auth';
 
 const store = configureStore({
   reducer: {
-    billList: billList
+    auth: auth
   }
 });
 
