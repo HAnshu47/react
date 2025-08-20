@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../pages/layout';
 import Login from '../pages/login';
 import Index from '../pages/index';
+import RouteGuard from '../components/routeGuard';
 
 const router = createBrowserRouter([
   {
@@ -10,7 +11,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <RouteGuard>
+        <Layout />
+      </RouteGuard>
+    ),
 
     children: [
       {
@@ -24,7 +29,5 @@ const router = createBrowserRouter([
     element: <div>404</div>
   }
 ]);
-
-
 
 export default router;

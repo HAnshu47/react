@@ -4,14 +4,19 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import { postAuth } from '../../store/modules/auth'
+import { useNavigate } from 'react-router-dom';
+
 
 
 export default function Login() {
+  const Navigate = useNavigate()
   const dispatch = useDispatch()
   const [form] = Form.useForm();
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     // 实现登录
-    dispatch(postAuth(values))
+    const res = await dispatch(postAuth(values))
+    if (res)
+      Navigate('/');
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);

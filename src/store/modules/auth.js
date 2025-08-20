@@ -20,6 +20,7 @@ const { setBillList, getToken } = authSlice.actions;
 const postAuth = (payload) => async (dispatch) => {
   const res = await http.post('/authorizations', payload);
   dispatch(getToken(res.data));
+  return res.data;
 };
 
 export { setBillList, postAuth, getToken };
