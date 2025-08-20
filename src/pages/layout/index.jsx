@@ -7,6 +7,7 @@ export default function Index() {
   return (
     <div className="app">
       <div className="body">
+
         <Outlet />
       </div>
     </div>
