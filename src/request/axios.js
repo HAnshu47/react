@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -21,7 +22,8 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    console.error('请求出错:', error);
+    const msg = error.response?.data?.message || '请求失败,请稍后重试！';
+    message.error(msg);
     return Promise.reject(error);
   }
 );
