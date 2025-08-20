@@ -1,29 +1,28 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../pages/layout';
-// import Month from '../pages/month';
-// import Year from '../pages/years';
-// import Record from '../pages/record';
+import Login from '../pages/login';
+import Index from '../pages/index';
 
 const router = createBrowserRouter([
+  {
+    path: '/login',
+    element: <Login />
+  },
   {
     path: '/',
     element: <Layout />,
 
     children: [
-      // {
-      //   element: <Month />,
-      //   index: true
-      // },
-      // {
-      //   path: 'years',
-      //   element: <Year />
-      // }
+      {
+        element: <Index />,
+        index: true
+      }
     ]
+  },
+  {
+    path: '*',
+    element: <div>404</div>
   }
-  // {
-  //   path: '/record',
-  //   element: <Record />
-  // }
 ]);
 
 export default router;
