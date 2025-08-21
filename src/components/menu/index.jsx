@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
-import { Menu } from 'antd';
+import { ConfigProvider, Menu } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { findParentKeys } from '../../utils/index'
+import './index.scss'
 const menuItems = [
   {
     key: '/',
@@ -49,16 +50,33 @@ export default function Menus() {
     navigate(e.key)
   };
   return (
-    <Menu
-      theme='dark'
-      onClick={onClick}
-      openKeys={openKeys}
-      onOpenChange={e => setOpenKeys(e)}
-      selectedKeys={[current]}
-      mode="inline"
-      items={menuItems}
-    />
-
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            itemSelectedBg: '#F2F3F5', 
+            itemBg: '#00034D',
+            itemSelectedColor: '#00034D', 
+            itemHoverBg: '#3d27e3ff', 
+            itemHoverColor: '#F2F3F5',   
+            itemColor: '#F2F3F5',
+            subMenuItemSelectedColor:'#831f60ff',
+            itemBorderRadius:'40px',
+            popupBg:'#00034D'
+          },
+        },
+      }}
+    >
+      <Menu
+        onClick={onClick}
+        openKeys={openKeys}
+        onOpenChange={e => setOpenKeys(e)}
+        selectedKeys={[current]}
+        mode="inline"
+        items={menuItems}
+      />
+    </ConfigProvider>
 
   );
 };
+
