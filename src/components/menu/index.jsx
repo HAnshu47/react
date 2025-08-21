@@ -60,7 +60,7 @@ export default function Menus() {
             itemHoverBg: '#3d27e3ff', 
             itemHoverColor: '#F2F3F5',   
             itemColor: '#F2F3F5',
-            subMenuItemSelectedColor:'#831f60ff',
+            subMenuItemSelectedColor:'#ffffffff',
             itemBorderRadius:'40px',
             popupBg:'#00034D'
           },

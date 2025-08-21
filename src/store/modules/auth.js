@@ -8,9 +8,9 @@ const authSlice = createSlice({
   },
   reducers: {
     getToken(state, action) {
-      const { refresh_token } = action.payload;
-      state.token = refresh_token;
-      localStorage.setItem('token', refresh_token);
+      const { token } = action.payload;
+      state.token = token;
+      localStorage.setItem('token', token);
     }
   }
 });

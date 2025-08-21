@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -23,6 +24,12 @@ http.interceptors.response.use(
   (response) => response.data,
   (error) => {
     const msg = error.response?.data?.message || '请求失败,请稍后重试！';
+    console.log(error.response);
+    if (error.response.status === 401) {
+      message.error('请重新登录！');
+      window.location.href = '/login';
+      return Promise.reject(error);
+    }
     message.error(msg);
     return Promise.reject(error);
   }
