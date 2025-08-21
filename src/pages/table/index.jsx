@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Space, Table, Tag, Image, Pagination, Form, Radio, Select, DatePicker, Button } from 'antd';
+import { Space, Table, Tag, Image, Pagination, Form, Radio, Select, DatePicker, Button, Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDocsList } from '../../store/modules/docs';
+import { getDocsList, deleteDocs } from '../../store/modules/docs';
 import { useChannel } from '../../utils/hooks/useChannel';
+import { useNavigate } from 'react-router-dom';
 
 export default function Tables() {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ export default function Tables() {
 
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
-
+  const Navigate = useNavigate();
 
   // columns 配置
   const columns = [
@@ -40,8 +41,16 @@ export default function Tables() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleAction(record, 'edit')}>编辑</a>
-          <a onClick={() => handleAction(record, 'delete')}>删除</a>
+          <span onClick={() => handleAction(record, 'edit')}>编辑</span>
+          <Popconfirm
+            title="是否删除"
+            description="是否删除?"
+            onConfirm={confirm}
+            onCancel={cancel}
+            okText="确定"
+            cancelText="取消"
+          > <span onClick={() => handleAction(record, 'delete')}>删除</span></Popconfirm>
+
         </Space>
       ),
     },
@@ -94,6 +103,19 @@ export default function Tables() {
   // 操作
   const handleAction = (record, type) => {
     console.log(record, type);
+    if (type === 'delete') {
+      dispatch(deleteDocs(record.id)); //没有进行验证，思路没问题
+    } else {
+      // 带参数跳转
+      Navigate(`/settings/record/${record.id}`);
+    }
+
+  };
+  const confirm = () => {
+    console.log('confirm');
+  };
+  const cancel = () => {
+    console.log('cancel');
   };
 
 

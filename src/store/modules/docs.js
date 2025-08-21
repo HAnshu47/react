@@ -22,7 +22,7 @@ const docsSlice = createSlice({
 });
 
 // 封装获取菜单的异步函数
-const { setDocsList ,setChannelList} = docsSlice.actions;
+const { setDocsList, setChannelList } = docsSlice.actions;
 const getDocsList = (payload) => async (dispatch) => {
   const res = await http.get('/mp/articles', { params: payload });
   dispatch(setDocsList(res.data));
@@ -34,6 +34,11 @@ const getChannelList = () => async (dispatch) => {
   return res.data;
 };
 
-export { getDocsList,getChannelList };
+const deleteDocs = (id) => async (dispatch) => {
+  await http.delete(`/mp/articles/${id}`);
+  dispatch(getDocsList({ page: 1, per_page: 10 }));
+};
+
+export { getDocsList, getChannelList, deleteDocs };
 const reducer = docsSlice.reducer;
 export default reducer;

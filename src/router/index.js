@@ -24,16 +24,10 @@ const router = createBrowserRouter([
         index: true
       },
       {
-        path: '/settings',
+        path: 'settings',
         children: [
-          {
-            path: '/settings/table',
-            element: <Table />
-          },
-          {
-            path: '/settings/record',
-            element: <Record />
-          }
+          { path: 'table', element: <Table /> },
+          { path: 'record/:id?', element: <Record /> }
         ]
       }
     ]
