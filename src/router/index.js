@@ -1,8 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../pages/layout';
 import Login from '../pages/login';
-import Index from '../pages/index';
+import Dashboard from '../pages/dashboard';
 import RouteGuard from '../components/routeGuard';
+import Record from '../pages/record';
+import Table from '../pages/table';
 
 const router = createBrowserRouter([
   {
@@ -16,11 +18,23 @@ const router = createBrowserRouter([
         <Layout />
       </RouteGuard>
     ),
-
     children: [
       {
-        element: <Index />,
+        element: <Dashboard />,
         index: true
+      },
+      {
+        path: '/settings',
+        children: [
+          {
+            path: '/settings/table',
+            element: <Table />
+          },
+          {
+            path: '/settings/record',
+            element: <Record />
+          }
+        ]
       }
     ]
   },
