@@ -6,7 +6,8 @@ const docsSlice = createSlice({
   initialState: {
     docsList: [],
     docsPage: {},
-    channelList: []
+    channelList: [],
+    recordDetails: {}
   },
   reducers: {
     setDocsList(state, action) {
@@ -17,12 +18,15 @@ const docsSlice = createSlice({
     },
     setChannelList(state, action) {
       state.channelList = action.payload?.channels;
+    },
+    setRecordDetails(state, action) {
+      state.recordDetails = action.payload;
     }
   }
 });
 
 // 封装获取菜单的异步函数
-const { setDocsList, setChannelList } = docsSlice.actions;
+const { setDocsList, setChannelList, setRecordDetails } = docsSlice.actions;
 const getDocsList = (payload) => async (dispatch) => {
   const res = await http.get('/mp/articles', { params: payload });
   dispatch(setDocsList(res.data));
@@ -39,6 +43,12 @@ const deleteDocs = (id) => async (dispatch) => {
   dispatch(getDocsList({ page: 1, per_page: 10 }));
 };
 
-export { getDocsList, getChannelList, deleteDocs };
+const getRecordDetails = (id) => async (dispatch) => {
+  const res = await http.get(`/mp/articles/${id}`);
+  dispatch(setRecordDetails(res.data));
+  return res.data;
+};
+  
+export { getDocsList, getChannelList, deleteDocs, getRecordDetails };
 const reducer = docsSlice.reducer;
 export default reducer;
