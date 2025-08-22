@@ -1,68 +1,115 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useChannel } from '../../utils/hooks/useChannel';
-import { getRecordDetails } from '../../store/modules/docs';
-import { Button, Radio, Form, Input, Select, Image, Spin } from 'antd';
+import { Button, Radio, Form, Input, Select, Spin, Upload, message } from 'antd';
+import { recordDetailsAPI, putDocsAPI } from '../../api/docs';
+import { PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+const baseURl = import.meta.env.VITE_BASE_URL;
 
 export default function Record() {
   const { id } = useParams();
-  const dispatch = useDispatch();
   const channelList = useChannel();
-  const { recordDetails } = useSelector(state => state.docs);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
 
+
   const plainOptions = [
     { label: '单图', value: 1 },
-    { label: '三图', value: 2 },
+    { label: '三图', value: 3 },
     { label: '无图', value: 0 },
   ];
+  // 修改回显图片的格式
+  const formattedFileList = (images) => {
+    return images?.map((url, index) => ({
+      uid: String(index),
+      url,
+    }))
+  }
+
 
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      dispatch(getRecordDetails(id)).finally(() => setLoading(false));
+    const fetchData = async () => {
+      if (id) {
+        setLoading(true);
+        try {
+          const res = await recordDetailsAPI(id);
+          const { channel_id, title, content, cover } = res?.data;
+
+
+          form.setFieldsValue({
+            channel: channel_id ?? channelList[0]?.id,
+            title: title ?? '',
+            content: content ?? '',
+            type: cover?.type ?? 1,
+            images: cover?.images ?? [],
+          });
+          setFileList(formattedFileList(cover?.images ?? []));
+        } catch (error) {
+          console.error("获取详情失败:", error);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        // 新增
+        setLoading(false);
+        form.setFieldsValue({
+          channel: channelList[0]?.id,
+          type: 1,
+        });
+      }
+    };
+
+    fetchData();
+  }, [id, form, channelList]);
 
 
 
-    } else {
-      setLoading(false);
-    }
-  }, [id, dispatch]);
-
-  // 异步填充表单
-  useEffect(() => {
-    if (recordDetails && channelList.length > 0) {
-      const { channel_id, title, content, cover } = recordDetails;
-      form.setFieldsValue({
-        channel: channel_id ?? channelList[0]?.id,
-        title: title ?? '',
-        content: content ?? '',
-        type: cover?.type ?? 1,
-        images: cover?.images ?? [],
-      });
-    } else if (!id && channelList.length > 0) {
-      // 新增表单默认值
-      form.setFieldsValue({
-        channel: channelList[0]?.id,
-        type: 1,
-      });
-    }
-  }, [recordDetails, channelList, form, id]);
-
+const navigate = useNavigate();
   const onFinish = (values) => {
-    console.log('提交表单:', values);
+    const images = fileList.map((file) => file.url || file.response.data.url);
+    const { title, content, channel, type } = values;
+    const payload = {
+      title: title,
+      content: content,
+      channel_id: channel,
+      cover: {
+        type: type,
+        images
+      }
+    };
+    putDocsAPI(payload, id);
+
+    message.success('操作成功');
+    navigate('/settings/table')
+
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log('表单验证失败:', errorInfo);
   };
+  const handleChangeType = (value) => {
+    // 切换类型修改图片显示
+    setFileList([])
+
+
+  }
+  // 显示上传按钮
+  const uploadButton = (
+    <button style={{ border: 0, background: 'none' }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
+  const [fileList, setFileList] = useState([
+  ]);
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
   return (
     <Spin spinning={loading}>
       <Form
-        form={form} // ✅ 确保 form 实例绑定
+        form={form}
         name="recordForm"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -90,17 +137,27 @@ export default function Record() {
         </Form.Item>
 
         <Form.Item name="type" label="封面">
-          <Radio.Group options={plainOptions} />
+          <Radio.Group options={plainOptions} onChange={(e) => { handleChangeType(e.target.value) }} />
         </Form.Item>
 
-        <Form.Item name="images" label="封面图片">
-          <Image.PreviewGroup>
-            {(form.getFieldValue('images') || []).map((item, index) => (
-              <Image key={index} width={100} src={item} />
-            ))}
-          </Image.PreviewGroup>
-        </Form.Item>
+        {form.getFieldValue('type') === 0 ? (null) : (
+          <Form.Item name="images" label="封面图片" >
+            <>
 
+              <Upload
+                action={`${baseURl}/upload`}
+                listType="picture-card"
+                fileList={fileList}
+                onChange={handleChange}
+                name="image"
+              >
+                {fileList?.length >= form.getFieldValue('type') ? null : uploadButton}
+              </Upload>
+
+
+            </>
+          </Form.Item>
+        )}
         <Form.Item name="content" label="内容">
           <Input.TextArea />
         </Form.Item>

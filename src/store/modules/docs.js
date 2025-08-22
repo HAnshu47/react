@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import http from '../../request/axios';
+import { channelListAPI } from '../../api/channel';
+import { getDocsListAPI, deleteDocsAPI } from '../../api/docs';
 
 const docsSlice = createSlice({
   name: 'docs',
   initialState: {
     docsList: [],
     docsPage: {},
-    channelList: [],
-    recordDetails: {}
+    channelList: []
   },
   reducers: {
     setDocsList(state, action) {
@@ -18,37 +18,28 @@ const docsSlice = createSlice({
     },
     setChannelList(state, action) {
       state.channelList = action.payload?.channels;
-    },
-    setRecordDetails(state, action) {
-      state.recordDetails = action.payload;
     }
   }
 });
 
 // 封装获取菜单的异步函数
-const { setDocsList, setChannelList, setRecordDetails } = docsSlice.actions;
+const { setDocsList, setChannelList } = docsSlice.actions;
 const getDocsList = (payload) => async (dispatch) => {
-  const res = await http.get('/mp/articles', { params: payload });
+  const res = await getDocsListAPI(payload);
   dispatch(setDocsList(res.data));
   return res.data;
 };
 const getChannelList = () => async (dispatch) => {
-  const res = await http.get('/channels');
+  const res = await channelListAPI();
   dispatch(setChannelList(res.data));
   return res.data;
 };
 
 const deleteDocs = (id) => async (dispatch) => {
-  await http.delete(`/mp/articles/${id}`);
+  await deleteDocsAPI(id);
   dispatch(getDocsList({ page: 1, per_page: 10 }));
 };
 
-const getRecordDetails = (id) => async (dispatch) => {
-  const res = await http.get(`/mp/articles/${id}`);
-  dispatch(setRecordDetails(res.data));
-  return res.data;
-};
-  
-export { getDocsList, getChannelList, deleteDocs, getRecordDetails };
+export { getDocsList, getChannelList, deleteDocs };
 const reducer = docsSlice.reducer;
 export default reducer;
