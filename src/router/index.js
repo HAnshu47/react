@@ -2,9 +2,10 @@ import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../pages/layout';
 import Login from '../pages/login';
 import Dashboard from '../pages/dashboard';
-import RouteGuard from '../components/routeGuard';
 import Record from '../pages/record';
 import Table from '../pages/table';
+import { WithRouteGuard } from '../components/routeGuard';
+const HocComponent = WithRouteGuard(Layout);
 
 const router = createBrowserRouter([
   {
@@ -13,11 +14,12 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: (
-      <RouteGuard>
-        <Layout />
-      </RouteGuard>
-    ),
+    element: <HocComponent />,
+    /**
+     * 不能直接使用WithRouteGuard(<Layout />) 会报错
+     * 高阶组件 HOC 要传递组件本身，而不是直接传 JSX。
+     * createBrowserRouter 里的 element 要的是 JSX，所以需要 <WithRouteGuard><Layout /></WithRouteGuard> 的形式。
+     */
     children: [
       {
         element: <Dashboard />,
