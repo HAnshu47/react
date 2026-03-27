@@ -1,0 +1,45 @@
+import { createSlice } from '@reduxjs/toolkit';
+import { channelListAPI } from '../../api/channel';
+import { getDocsListAPI, deleteDocsAPI } from '../../api/docs';
+
+const docsSlice = createSlice({
+  name: 'docs',
+  initialState: {
+    docsList: [],
+    docsPage: {},
+    channelList: []
+  },
+  reducers: {
+    setDocsList(state, action) {
+      //  state.docsList = action.payload;
+      const { results, page, per_page, total_count } = action.payload;
+      state.docsList = results;
+      state.docsPage = { page, per_page, total_count };
+    },
+    setChannelList(state, action) {
+      state.channelList = action.payload?.channels;
+    }
+  }
+});
+
+// 封装获取菜单的异步函数
+const { setDocsList, setChannelList } = docsSlice.actions;
+const getDocsList = (payload) => async (dispatch) => {
+  const res = await getDocsListAPI(payload);
+  dispatch(setDocsList(res.data));
+  return res.data;
+};
+const getChannelList = () => async (dispatch) => {
+  const res = await channelListAPI();
+  dispatch(setChannelList(res.data));
+  return res.data;
+};
+
+const deleteDocs = (id) => async (dispatch) => {
+  await deleteDocsAPI(id);
+  dispatch(getDocsList({ page: 1, per_page: 10 }));
+};
+
+export { getDocsList, getChannelList, deleteDocs };
+const reducer = docsSlice.reducer;
+export default reducer;

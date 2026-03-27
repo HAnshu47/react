@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  flex: 0;
+  border-bottom: solid 1px var(--adm-color-border);
+}
+
+.body {
+  flex: 1;
+  // display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom {
+  flex: 0;
+  border-top: solid 1px var(--adm-color-border);
+}
+
+.bill-nav-bar {
+  position: sticky;
+  color: #000;
+  background-color: #ccc;
+}
+.bill-balance {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  border: 1px solid #ccc;
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+.bill-balance-details {
+  height: calc(100vh - 45px - 102px - 49px);
+  overflow: auto;
+}
+.bill-balance-item {
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-top: 20px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  &-card {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-title {
+    font-size: 16px;
+    font-weight: 600;
+    display: block;
+  }
+  &-text {
+    margin-right: 20px;
+  }
+
+  &-text:nth-child(1) {
+    color: red;
+  }
+  &-text:nth-child(2) {
+    color: green;
+  }
+}
+
+.bill-balance-time {
+  padding: 20px;
+}
+.month-balance-details {
+  .month-balance-card {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+
+    .month-balance-card-bill {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+.bill-item-details {
+  display: flex;
+  justify-content: space-between;
+  span {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+}
+
+.search-time {
+  background: red;
+  height: 100px;
+  width: 100%;
+}
+
+.bill-type {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  .bill-type-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .bill-type-item {
+    display: flex;
+    justify-content: flex-start;
+    // 换行
+    flex-wrap: wrap;
+  }
+  .bill-type-items {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 20px;
+    text-align: center;
+    line-height: 80px;
+    margin: 10px;
+  }
+  .active{
+    background-color: aquamarine;
+  }
+}
